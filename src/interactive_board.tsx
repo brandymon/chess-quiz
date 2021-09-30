@@ -7,13 +7,13 @@ import * as ChessJS from "chess.js";
 
 import Chessboard from "chessboardjsx";
 import * as ChessboardJSX from "chessboardjsx";
-
+//hack - the only way I could get the test and production working
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 
 type MaybeSquare = ChessJS.Square | null;
 
 interface BoardState {
-    position: string,
+    //position: string,
     dropSquareStyle: ChessboardJSX.Props["dropSquareStyle"],
     squareStyles: ChessboardJSX.Props["squareStyles"],
     pieceSquare: MaybeSquare,
@@ -29,7 +29,7 @@ export interface BoardProps {
 
 export default function InteractiveBoard(props: BoardProps) {
     const [boardState, setBoardState] = useState<BoardState>({
-        position: props.position,
+        //position: props.position,
         //style for active drop square
         dropSquareStyle: {},
         //custom square styles
@@ -44,8 +44,8 @@ export default function InteractiveBoard(props: BoardProps) {
 
     const getHistory = () => props.game.history({verbose: true});
 
-
-    const highlightSquare = (squaresToHighlight: MaybeSquare[]) => {
+    //given existing state, compute new state that highlights given squares and applies the base squareStyles
+    const styleSquaresAndHighlight = (state: BoardState, squaresToHighlight: MaybeSquare[]) : BoardState => {
         const highlightStyles = squaresToHighlight
             .map(square => ({ square, piece: square && props.game.get(square) }))
             .reduce((a, {square, piece}) => ({
@@ -64,66 +64,60 @@ export default function InteractiveBoard(props: BoardProps) {
                     }
                 }))
             }), {});
-            
-        setBoardState(state => ({...state, squareStyles: {
-            ...getSquareStyles({...boardState, history: getHistory()}),
-            ...highlightStyles,
-        }}));
+        
+        return {
+            ...state,
+            squareStyles: {
+                ...getSquareStyles({...state, history: getHistory()}),
+                ...highlightStyles
+            }
+        }
     };
 
-    const highlightMovesFromSquare = (square: MaybeSquare) => {
+    const highlightMovesFromSquare = (state: BoardState, square?: ChessJS.Square) => {
         //get possible moves, highlight squares
-        const moves = (square && props.game.moves({square: square, verbose: true}))
-            || (boardState.pieceSquare && props.game.moves({square: boardState.pieceSquare, verbose: true}));
+        let movesFromSquare = props.game.moves({square: square, verbose: true});
 
-        if (moves && moves.length)
-            highlightSquare(moves.map(m => m.to))
-        else if (!boardState.pieceSquare)
-            highlightSquare([]);
+        const moves = (square && movesFromSquare.length && movesFromSquare)
+            || (state.pieceSquare && props.game.moves({square: state.pieceSquare, verbose: true}))
+            || [];
+
+        return styleSquaresAndHighlight(state, moves.map(m => m.to))
     };
 
-    const removeHighlightedSquare = () => highlightMovesFromSquare(null);
+    const removeHighlightedSquare = () => setBoardState(state => highlightMovesFromSquare(state));
 
     const onMouseOutSquare =  (_square: any) => removeHighlightedSquare();
 
-    //make the move, return true if move is legal, false otherwise
-    const makeMove = ({sourceSquare, targetSquare}: {sourceSquare: ChessJS.Square, targetSquare: ChessJS.Square}) => {
-        const move = props.game.move({
-            from: sourceSquare,
-            to: targetSquare,
-            promotion: "q" //always promote to queen for simplicity
-        });
+    //return a new state with the given move made (if legal), or null if the move is illegal
+    const getStateAfterMove = (state: BoardState, move: ChessJS.ShortMove) => {
 
-        if (move !== null)
+        if (props.game.move(move))
         {
-            updateState({
-                position: props.position,
-                squareStyles: getSquareStyles({...boardState, history: getHistory()}),
-                pieceSquare: null
-            });
-
             if (props.onValidMove)
                 props.onValidMove(move, props.game.fen());
             
-            return true;
+            return {
+                ...state,
+                //position: props.game.fen(),
+                squareStyles: getSquareStyles({...boardState, history: getHistory()}),
+                pieceSquare: null
+            };
         }
         
-        return false;
+        return null;
         
     };
-
+    
     const onDragOverSquare = () => {
         updateState({dropSquareStyle: { boxShadow: "inset 0 0 1px 4px rgb(175, 160, 143)"}});
     };
-
-    const onSquareClick = (square: ChessJS.Square) => {
-
-        if (boardState.pieceSquare && makeMove({sourceSquare: boardState.pieceSquare, targetSquare: square}))
-            return;
-        
-        updateState({ pieceSquare: props.game.get(square) && square });
-        highlightMovesFromSquare(null);
-    };
+    
+    const onSquareClick = (square: ChessJS.Square) =>
+        setBoardState(state => 
+            (state.pieceSquare && getStateAfterMove(state, {from: state.pieceSquare, to: square, promotion: "q"}))
+            || { ...highlightMovesFromSquare(state, square), pieceSquare: props.game.get(square) && square }
+        );
 
     const onSquareRightClick = () => {
         //TODO
@@ -131,10 +125,9 @@ export default function InteractiveBoard(props: BoardProps) {
 
     
     return (<Chessboard
-        id="humanVsHuman"
         position={props.position}
-        onDrop={makeMove}
-        onMouseOverSquare={highlightMovesFromSquare}
+        onDrop={({sourceSquare, targetSquare}) => setBoardState(state => getStateAfterMove(state, {from: sourceSquare, to: targetSquare, promotion: "q"}) || state)}
+        onMouseOverSquare={(square) => setBoardState(state => highlightMovesFromSquare(state, square))}
         onMouseOutSquare={onMouseOutSquare}
         boardStyle={{
             borderRadius: "5px",
