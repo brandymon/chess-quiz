@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Quiz from './quiz';
+import QuizView from './quiz_view';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Quiz/>
+    <QuizView/>
   </React.StrictMode>,
   document.getElementById('root')
 );

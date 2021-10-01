@@ -27,7 +27,7 @@ export interface BoardProps {
     onValidMove: (move: ChessJS.ShortMove, position: string) => void
 }
 
-export default function InteractiveBoard(props: BoardProps) {
+const InteractiveBoard : React.FC<BoardProps> = (props) => {
     const [boardState, setBoardState] = useState<BoardState>({
         //position: props.position,
         //style for active drop square
@@ -147,6 +147,7 @@ InteractiveBoard.defaultProps = {
     game: new Chess()
 }
 
+export default InteractiveBoard;
 
 const getSquareStyles = ({pieceSquare, history}: Required<BoardState>) : ChessboardJSX.Props["squareStyles"] => {
     const {from, to} = history.length ? history[history.length - 1] : { from: null, to: null };
