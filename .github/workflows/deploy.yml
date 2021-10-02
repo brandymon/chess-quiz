@@ -18,6 +18,6 @@ jobs:
         run: npm ci
       - name: deploy pages
         run: |
-          git config user.name ${{ github.actor }}
-          git config user.email ${{ github.actor }}@users.noreplu.github.com
+          git config --global user.name ${{ github.actor }}
+          git config --global user.email ${{ github.actor }}@users.noreply.github.com
           npm run deploy
