@@ -11,10 +11,13 @@ export interface QuizModel {
      /** FEN of the  starting position for this line */ 
     initialPosition: string,
     /** A sequence of questions to ask about the position */
-    questions: QuizQuestion[]
+    questions: QuizQuestion[],
+    /** the name of this quiz */
+    name: string
 }
 
 export const viennaGambitAcceptedQuiz: QuizModel = {
+    name: "Vienna Gambit Accepted",
     initialPosition: "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
     questions: [
         {

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useReducer, useState } from "react";
+import React, { Fragment, PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "./interactive_board";
@@ -22,23 +22,40 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
     let [game] = useState(() => new Chess(position));
     let [questionNumber, incrementQuestionNumBy] = useReducer((state: number, num: number) => state + num, 0);
 
+    useEffect(() => { 
+        document.title = quiz.name;
+    });
+
     let [prompts, addPrompt] = useReducer((oldPrompts: string[], newPrompt: string) => [...oldPrompts, newPrompt],
         [quiz.questions[0].prompt]);
 
     let [quizState, setQuizState] = useState(QuizState.AwaitingMove);
+
+    let [score, incrementScore] = useReducer((current: number) => current + 1, 0);
+    let [gotQuestionWrong, setGotQuestionWrong] = useState(false);
     
     const onValidMove = (move: ChessJS.ShortMove, newPosition: string) => {
         setPosition(newPosition);
         
         const question = quiz.questions[questionNumber];
         const correctMove = question.correctMove;
-
+        const history = game.history();
+        const lastMove = history[history.length - 1];
         if (move.from === correctMove.from && move.to === correctMove.to) {
-            addPrompt(`Correct. ${question.response}`);
-            setQuizState(QuizState.Next);
+            
+            addPrompt(`${lastMove} is correct. ${question.response}`);
+
+            if (gotQuestionWrong) setGotQuestionWrong(false);
+            else incrementScore();
+
+            if (questionNumber === quiz.questions.length - 1)
+                setQuizState(QuizState.Complete);
+            else
+                setQuizState(QuizState.Next);
         }
         else {
-            addPrompt("Incorrect");
+            setGotQuestionWrong(true);
+            addPrompt(`${lastMove} is incorrect`);
             setQuizState(QuizState.Retry);
         }
     };
@@ -54,35 +71,35 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
                     game.move(quiz.questions[questionNumber].nextMove);
                     setPosition(game.fen());
                 }
-                if (questionNumber < quiz.questions.length) {
-                    incrementQuestionNumBy(1);
-                    addPrompt(quiz.questions[questionNumber + 1].prompt);
-                }
-                else {
-
-                }
-                
+                addPrompt(quiz.questions[questionNumber + 1].prompt);
+                incrementQuestionNumBy(1);
                 break;
-            default:
+            case QuizState.Complete:
+
         }
+
         setQuizState(QuizState.AwaitingMove);
     }
 
     return ( 
-        <div style={{display: "flex"}}>
-            <div style={quizState !== QuizState.AwaitingMove ? {pointerEvents: "none"} : {}}>
-                <InteractiveBoard 
-                    key={quiz.initialPosition}
-                    position={position} 
-                    game={game}
-                    onValidMove={onValidMove}
-                />
+        <Fragment>
+            <h1>{quiz.name}</h1>
+            <div style={{display: "flex"}}>
+                <div style={quizState !== QuizState.AwaitingMove ? {pointerEvents: "none"} : {}}>
+                    <InteractiveBoard 
+                        key={quiz.initialPosition}
+                        position={position} 
+                        game={game}
+                        onValidMove={onValidMove}
+                    />
+                </div>
+                <ul>
+                    {prompts.map((p, i) => <li key={i}>{p}</li>)} 
+                    {quizState === QuizState.Complete && <li>{`You scored ${score}/${quiz.questions.length}`}</li>}
+                    {(quizState && <li key={"retry"}><button onClick={onButtonClick}>{quizState}</button></li>)}
+                </ul>
             </div>
-            <li>
-                {prompts.map((p, i) => <ul key={i}>{p}</ul>)} 
-                {quizState && <ul><button onClick={onButtonClick}>{quizState}</button></ul>}
-            </li>
-        </div>
+        </Fragment>
     );
 }
 
