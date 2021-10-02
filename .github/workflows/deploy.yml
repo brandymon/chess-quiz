@@ -16,4 +16,4 @@ jobs:
           node-version: 10.x
       - name: Install dependencies
         run: npm ci
-      - run: npm deploy
+      - run: npm run deploy
