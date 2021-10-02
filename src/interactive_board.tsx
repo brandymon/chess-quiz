@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { CSSProperties, useState } from "react";
 //import PropTypes from "prop-types";
 
 
@@ -13,31 +13,45 @@ const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 type MaybeSquare = ChessJS.Square | null;
 
 interface BoardState {
-    //position: string,
+    /**Styles for squares undergoing a drag-drop */
     dropSquareStyle: ChessboardJSX.Props["dropSquareStyle"],
+    /**Styles to apply to individual squares in render, used for highlighting possible moves and selected squares */
     squareStyles: ChessboardJSX.Props["squareStyles"],
+    /**The currently selected piece for click-based movement */
     pieceSquare: MaybeSquare,
-    square: MaybeSquare,
+    /**The series of moves made in this game (not stored in state, but passed in for some functions) */
     history?: ChessJS.Move[]
 }
 
 export interface BoardProps {
+    /**The board position of the current chess game, in FEN */
     position: string,
+    /**The ChessInstance used for determining legal moves and store history (passed in as a prop so parent component can manipulate) */
     game: ChessInstance,
+    /**Callback used when a valid move is made */
     onValidMove: (move: ChessJS.ShortMove, position: string) => void
 }
 
+const moveHighlightColor = "#666cad";
+const pieceHighlightColor = "#a0dfcb";
+
+//exported to make writing unit tests easier
+export const highlightMoveStyle = {
+    backgroundImage: `radial-gradient(circle, ${moveHighlightColor} 10%, transparent 30%)`,
+};
+
+export const highlightCaptureStyle = {
+    boxShadow: `inset 0 0 0 8px ${moveHighlightColor}`,
+    borderRadius: "50%",
+};
+
+export const highlightSquareStyle = { backgroundColor: pieceHighlightColor };
+
 const InteractiveBoard : React.FC<BoardProps> = (props) => {
     const [boardState, setBoardState] = useState<BoardState>({
-        //position: props.position,
-        //style for active drop square
         dropSquareStyle: {},
-        //custom square styles
         squareStyles: {},
-        //square with clicked piece
         pieceSquare: null,
-        //currently clicked square
-        square: null,
     });
 
     const updateState = (newState: Partial<BoardState>) => setBoardState(oldState => ({...oldState, ...newState}));
@@ -46,31 +60,35 @@ const InteractiveBoard : React.FC<BoardProps> = (props) => {
 
     //given existing state, compute new state that highlights given squares and applies the base squareStyles
     const styleSquaresAndHighlight = (state: BoardState, squaresToHighlight: MaybeSquare[]) : BoardState => {
-        const highlightStyles = squaresToHighlight
+        const highlightMoves: {[id: string]: CSSProperties} = squaresToHighlight
             .map(square => ({ square, piece: square && props.game.get(square) }))
             .reduce((a, {square, piece}) => ({
                 ...a,
                 ...(piece && square && {
                     [square]: {
-                        boxShadow: "inset 0 0 0 5px rgb(175, 160, 143)",
+                        boxShadow: `inset 0 0 0 8px ${moveHighlightColor}`,
                         borderRadius: "50%",
                     } 
                 }),
                 ...(piece || (square && {
                     [square]: {
-                        background:
-                        "radial-gradient(circle, rgb(175, 160, 143) 10%, transparent 30%)",
-                        borderRadius: "20%"
+                        backgroundImage:
+                        `radial-gradient(circle, ${moveHighlightColor} 10%, transparent 30%)`,
                     }
                 }))
             }), {});
+        const highlightSquares = getSquareStyles({...state, history: getHistory()});
+
+        //if a square needs both a move highlight AND a square highlight, then we need those style objects together
+        let mergeSquareStyles:  {[id: string]: CSSProperties} = {};
+        for (var key of Object.keys(highlightSquares))
+            if (highlightMoves.hasOwnProperty(key))
+                mergeSquareStyles[key] = { ...highlightMoves[key], ...highlightSquares[key] };
+        mergeSquareStyles = {...highlightMoves, ...highlightSquares, ...mergeSquareStyles};
         
         return {
             ...state,
-            squareStyles: {
-                ...getSquareStyles({...state, history: getHistory()}),
-                ...highlightStyles
-            }
+            squareStyles: mergeSquareStyles
         }
     };
 
@@ -110,7 +128,7 @@ const InteractiveBoard : React.FC<BoardProps> = (props) => {
     };
     
     const onDragOverSquare = () => {
-        updateState({dropSquareStyle: { boxShadow: "inset 0 0 1px 4px rgb(175, 160, 143)"}});
+        updateState({dropSquareStyle: { boxShadow: `inset 0 0 1px 4px ${moveHighlightColor}`}});
     };
     
     const onSquareClick = (square: ChessJS.Square) =>
@@ -130,14 +148,16 @@ const InteractiveBoard : React.FC<BoardProps> = (props) => {
         onMouseOverSquare={(square) => setBoardState(state => highlightMovesFromSquare(state, square))}
         onMouseOutSquare={onMouseOutSquare}
         boardStyle={{
-            borderRadius: "5px",
-            boxShadow: `0 5px 15px rgba(0, 0, 0, 0.5)`
+            boxShadow: "rgba(0, 0, 0, 0.5) 0px 5px 15px"
         }}
         squareStyles={boardState.squareStyles}
         dropSquareStyle={boardState.dropSquareStyle}
         onDragOverSquare={onDragOverSquare}
         onSquareClick={onSquareClick}
         onSquareRightClick={onSquareRightClick}
+        darkSquareStyle={{backgroundColor: "#929af7"}}
+        lightSquareStyle={{backgroundColor: "#e9ebfd"}}
+        
     />);
 
 }
@@ -149,10 +169,9 @@ InteractiveBoard.defaultProps = {
 
 export default InteractiveBoard;
 
-const getSquareStyles = ({pieceSquare, history}: Required<BoardState>) : ChessboardJSX.Props["squareStyles"] => {
+const getSquareStyles = ({pieceSquare, history}: Required<BoardState>) => {
     const {from, to} = history.length ? history[history.length - 1] : { from: null, to: null };
-    const highlightColor = "rgba(255, 255, 0, 0.4)";
-    const highlightStyle = { backgroundColor: highlightColor };
+    const highlightStyle = { backgroundColor: pieceHighlightColor };
 
     
     return {
