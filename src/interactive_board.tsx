@@ -143,12 +143,13 @@ const InteractiveBoard : React.FC<BoardProps> = (props) => {
 
     
     return (<Chessboard
+        width={Math.min(window.innerWidth, window.innerHeight) * 0.8}
         position={props.position}
         onDrop={({sourceSquare, targetSquare}) => setBoardState(state => getStateAfterMove(state, {from: sourceSquare, to: targetSquare, promotion: "q"}) || state)}
         onMouseOverSquare={(square) => setBoardState(state => highlightMovesFromSquare(state, square))}
         onMouseOutSquare={onMouseOutSquare}
         boardStyle={{
-            boxShadow: "rgba(0, 0, 0, 0.5) 0px 5px 15px"
+            fontFamily: "-sans-serif"
         }}
         squareStyles={boardState.squareStyles}
         dropSquareStyle={boardState.dropSquareStyle}
