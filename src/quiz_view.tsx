@@ -1,8 +1,8 @@
-import React, { Fragment, PropsWithChildren, useEffect, useReducer, useState } from "react";
+import React, { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "./interactive_board";
-import { QuizModel, viennaGambitAcceptedQuiz } from "./quiz_model";
+import { QuizModel, QuizQuestion, viennaGambitAcceptedQuiz } from "./quiz_model";
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 
 enum QuizState {
@@ -16,10 +16,29 @@ export interface QuizProps {
     quiz: QuizModel
 }
 
-interface ulClass {
-    className: string,
-    body: string | JSX.Element
+interface QuestionViewProps {
+    quiz: QuizModel,
+    questionNumber: number
 }
+
+const getPrompt = (className: string, title: string, message?: string) =>
+    <li className={className}>
+        <span><h3>{title}</h3>{message}</span>
+    </li>;
+
+const AskQuestion = (props: QuestionViewProps) =>
+    getPrompt("Question", `Question ${props.questionNumber + 1}`, props.quiz.questions[props.questionNumber].prompt);
+
+interface ResponseViewProps {
+    message?: string,
+    move: string
+}
+
+const IncorrectResponse = (props: ResponseViewProps) =>
+    getPrompt("Incorrect", `${props.move} is incorrect`, props.message);
+
+const CorrectResponse = (props: ResponseViewProps) => 
+    getPrompt("Correct", `${props.move} is correct`, props.message);
 
 export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
     
@@ -31,9 +50,9 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
         document.title = quiz.name;
     });
 
-    let [prompts, addPrompt] = useReducer((oldPrompts: JSX.Element[], {className, body}: ulClass) => 
-        [...oldPrompts, <li className={className}>{body}</li>],
-        [<li className="Question">{quiz.questions[0].prompt}</li>]);
+    let [prompts, addPrompt] = useReducer((oldPrompts: JSX.Element[], newPrompt: JSX.Element) => 
+        [...oldPrompts, newPrompt],
+        [<AskQuestion questionNumber={0} quiz={quiz}/>]);
 
     let [quizState, setQuizState] = useState(QuizState.AwaitingMove);
 
@@ -49,7 +68,7 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
         const lastMove = history[history.length - 1];
         if (move.from === correctMove.from && move.to === correctMove.to) {
             
-            addPrompt({className: "Correct", body: `${lastMove} is correct. ${question.response}`});
+            addPrompt(<CorrectResponse move={lastMove} message={question.response}/>);
 
             if (gotQuestionWrong) setGotQuestionWrong(false);
             else incrementScore();
@@ -61,7 +80,7 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
         }
         else {
             setGotQuestionWrong(true);
-            addPrompt({className:"Incorrect", body: `${lastMove} is incorrect`});
+            addPrompt(<IncorrectResponse move={lastMove}/>);
             setQuizState(QuizState.Retry);
         }
     };
@@ -77,7 +96,7 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
                     game.move(quiz.questions[questionNumber].nextMove);
                     setPosition(game.fen());
                 }
-                addPrompt({className: "Question", body: quiz.questions[questionNumber + 1].prompt});
+                addPrompt(<AskQuestion quiz={quiz} questionNumber={questionNumber+1}/>);
                 incrementQuestionNumBy(1);
                 break;
             case QuizState.Complete:
@@ -87,10 +106,15 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
         setQuizState(QuizState.AwaitingMove);
     }
 
+    useEffect(() => {
+        let list = document.getElementById("quizPromptList");
+        if (list) list.scrollTop = list.scrollHeight;
+    }, [prompts]);
+
     return ( 
-        <Fragment>
-            <h1>{quiz.name}</h1>
-            <div className="Quiz">
+        <div className="Quiz">
+            <h2>{quiz.name}</h2>
+            <div className="QuizBoardAndPrompts">
                 <div 
                     className="Chessboard"
                     style={quizState !== QuizState.AwaitingMove ? {pointerEvents: "none"} : {}}
@@ -102,15 +126,15 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
                         onValidMove={onValidMove}
                     />
                 </div>
-                <div className="PromptContainer">
+                <div className="PromptContainer" id="quizPromptList">
                     <ul className="QuizPrompt">
                         {prompts} 
-                        {quizState === QuizState.Complete && <li>{`You scored ${score}/${quiz.questions.length}`}</li>}
+                        {quizState === QuizState.Complete && <li><span>{`You scored ${score}/${quiz.questions.length}`}</span></li>}
                         {(quizState && <button onClick={onButtonClick}>{quizState}</button>)}
                     </ul>
                 </div>
             </div>
-        </Fragment>
+        </div>
     );
 }
 

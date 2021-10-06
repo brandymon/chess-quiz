@@ -5,11 +5,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #1d1f31;
-  color: #ffffff
+  color: #ffffff;
 }
 
-h1 {
-  text-align: center;
+html, body, #root {
+  height: 100%;
 }
 
 code {
@@ -33,50 +33,84 @@ code {
   border-top-right-radius: 0.4em;
 }
 
-div.Quiz {
+.Quiz {
   display: flex;
-  justify-content: space-around;
-  gap: 2vw;
-  margin: 0vw 2vw;
-  height: 80vh;
-  overflow: hidden;
+  flex-flow: column;
+  height: 100%;
 }
 
-div.Chessboard {
+.Quiz h2 {
+  flex: 0 0 auto;
+  text-align: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 4vmin;
+}
+
+.QuizBoardAndPrompts {
+  display: flex;
+  justify-content: space-around;
+  gap: 2vmin;
+  margin: 0vmin 2vmin 2vmin;
+  flex: 1 1 auto;
+  overflow: hidden;
+  align-items: center;
+}
+
+.Chessboard {
   height: 80vmin;
   flex-grow: 0;
 }
 
-ul.QuizPrompt {
+.QuizPrompt {
   list-style-type: none;
   margin: 0px 0px;
-  padding: 0px 1em;
+  padding: 0px 0px;
   height: 100%;
 }
 
-ul.QuizPrompt li {
+.QuizPrompt li span {
   border-radius: 0.4em;
   background-color: #838bde;
-  padding: 0.4em 0.8em;
+  padding: 0.4em 0.6em;
   margin: 0em 0em 0.8em 0em;
+  display: inline-block;
 }
 
-ul.QuizPrompt li.Correct {
+.QuizPrompt li.Correct span {
   background-color: #61C9A8;
 }
 
-ul.QuizPrompt li.Incorrect {
+.QuizPrompt li.Incorrect span {
   background-color: #BA3B46;
 }
 
-div.PromptContainer {
+li h3 {
+  margin: 0em;
+}
+
+.PromptContainer {
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  height: 80vmin;
 }
 
 @media only screen and (orientation: portrait) {
-  div.Quiz {
+  .QuizBoardAndPrompts {
     flex-direction: column;
   }
+}
+
+button {
+  border-color: #ffffff;
+  border-radius: 0.4em;
+  color: #ffffff;
+  background-color: #1d1f31;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.4em 0.6em;
+}
+
+button:hover {
+  background-color: #2F195F;
 }
