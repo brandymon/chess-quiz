@@ -64,3 +64,28 @@ export const viennaGambitAcceptedQuiz: QuizModel = {
         },
     ]
 };
+
+export const viennaGambitDeclinedNc6Quiz: QuizModel = {
+    name: "Vienna Gambit Declined, 3.Nc6",
+    initialPosition: "r1bqkb1r/pppp1ppp/2n2n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 4",
+    questions: [
+        {
+            prompt: "At low levels, one common way to decline the gambit is with Nc3, but this is winning for white. Find the refutation.",
+            correctMove: { from: "f4", to: "e5" },
+            response: "White takes the pawn anyway",
+            nextMove: { from: "c6", to: "e5" }
+        },
+        {
+            prompt: "Suppose black recaptures the pawn. What is the best continuation for white?",
+            correctMove: { from: "d2", to: "d4", },
+            response: "White puts two pawns in the centre while gaining tempo on the knight.",
+            nextMove: { from: "e5", to: "g6" }
+        },
+        {
+            prompt: "Finally, black's knight on e5 could retreat to g6 or c6. Either way, which move best preserves white's advantage?",
+            correctMove: { from: "e4", to: "e5", },
+            response: "White gains dominant central control and forces black's knight on f6 to retreat. This gives white a crushing advantage out of the opening.",
+            nextMove: { from: "e5", to: "g6" }
+        },
+    ]
+};
