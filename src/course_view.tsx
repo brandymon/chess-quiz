@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { Fragment, PropsWithChildren, useState } from "react";
 import { CourseModel } from "./course_model";
 import { QuizModel } from "./quiz_model";
 import QuizPreview from "./quiz_preview";
@@ -15,9 +15,12 @@ export default function CourseView(props: PropsWithChildren<CourseViewProps>) {
     if (quiz) return <QuizView quiz={quiz} onFinishQuiz={()=>setQuiz(null)}/>;
 
     return (
-        <div>
+        <Fragment>
+            <h1>{props.course.name}</h1>
             <h2>Choose a line to review</h2>
-            {props.course.lines.map(quiz => <QuizPreview quiz={quiz} onClick={()=>setQuiz(quiz)}/>)}
-        </div>
+            <div className="CourseView">
+                {props.course.lines.map(quiz => <QuizPreview quiz={quiz} onClick={()=>setQuiz(quiz)}/>)}
+            </div>
+        </Fragment>
     )
 }

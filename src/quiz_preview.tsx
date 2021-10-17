@@ -8,11 +8,13 @@ export interface QuizPreviewProps {
 }
 
 const QuizPreview = (props: PropsWithChildren<QuizPreviewProps>) =>  
-    <div onClick={props.onClick}>
+    <div className="QuizPreview" onClick={props.onClick}>
         <Chessboard 
             darkSquareStyle={{backgroundColor: "#929af7"}}
             lightSquareStyle={{backgroundColor: "#e9ebfd"}}
             position={props.quiz.initialPosition}
+            width={200}
+            draggable={false}
         />
         <h2>{props.quiz.name}</h2>
     </div>;
