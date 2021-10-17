@@ -109,8 +109,10 @@ button {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em 0.6em;
+  font-weight: 700;
 }
 
 button:hover {
-  background-color: #2F195F;
+  color: #838bde;
+  border-color: #838bde;
 }
