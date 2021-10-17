@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useReducer, useState } from "react";
+import { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "./interactive_board";
