@@ -95,9 +95,10 @@ h1 {
   display: grid;
   gap: 2vmin;
   margin: 2vmin 2vmin;
-  grid-template-columns: repeat(auto-fill,  calc(2em + 200px));
+  grid-template-columns: repeat(auto-fit,  minmax(calc(2em + 200px), 1fr));
   grid-auto-rows: max-content;
   justify-content: center;
+  justify-items: center;
 }
 
 .QuizPreview {
@@ -137,15 +138,6 @@ li h3 {
   height: 80vmin;
 }
 
-@media only screen and (orientation: portrait) {
-  .QuizBoardAndPrompts {
-    flex-direction: column;
-  }
-  .CourseView {
-    flex-direction: column;
-  }
-}
-
 button {
   border-color: #ffffff;
   border-radius: 0.4em;
@@ -161,4 +153,28 @@ button:hover {
   color: #838bde;
   border-color: #838bde;
   cursor: pointer;
+}
+
+.Score.Passed {
+  background-color: #61C9A8;
+}
+
+.Score.Failed {
+  background-color: #BA3B46;
+}
+
+.Score {
+  border-radius: 50%;
+  border: 0.2em solid #ffffff;
+  padding: 0.2em;
+  font-weight: bold;
+}
+
+@media only screen and (orientation: portrait) {
+  .QuizBoardAndPrompts {
+    flex-direction: column;
+  }
+  .CourseView {
+    flex-direction: column;
+  }
 }
