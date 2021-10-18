@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useReducer, useState } from "react";
+import { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "./interactive_board";
@@ -13,7 +13,8 @@ enum QuizState {
 }
 
 export interface QuizProps {
-    quiz: QuizModel
+    quiz: QuizModel,
+    onFinishQuiz: (score: number) => void,
 }
 
 interface QuestionViewProps {
@@ -40,7 +41,7 @@ const IncorrectResponse = (props: ResponseViewProps) =>
 const CorrectResponse = (props: ResponseViewProps) => 
     getPrompt("Correct", `${props.move} is correct`, props.message);
 
-export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
+export default function QuizView({quiz, onFinishQuiz}: PropsWithChildren<QuizProps>) {
     
     let [position, setPosition] = useState(quiz.initialPosition);
     let [game] = useState(() => new Chess(position));
@@ -100,7 +101,7 @@ export default function QuizView({quiz}: PropsWithChildren<QuizProps>) {
                 incrementQuestionNumBy(1);
                 break;
             case QuizState.Complete:
-
+                onFinishQuiz(score);
         }
 
         setQuizState(QuizState.AwaitingMove);

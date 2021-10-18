@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ViennaGameCourse } from './course_model';
+import CourseView from './course_view';
 import './index.css';
-import QuizView from './quiz_view';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <QuizView/>
+    <CourseView course={ViennaGameCourse}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
