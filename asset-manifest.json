@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/chess-quiz/static/css/main.a6b29d57.chunk.css",
-    "main.js": "/chess-quiz/static/js/main.bed572e5.chunk.js",
-    "main.js.map": "/chess-quiz/static/js/main.bed572e5.chunk.js.map",
+    "main.css": "/chess-quiz/static/css/main.05e62c20.chunk.css",
+    "main.js": "/chess-quiz/static/js/main.7c2fa3b5.chunk.js",
+    "main.js.map": "/chess-quiz/static/js/main.7c2fa3b5.chunk.js.map",
     "runtime-main.js": "/chess-quiz/static/js/runtime-main.956f83f7.js",
     "runtime-main.js.map": "/chess-quiz/static/js/runtime-main.956f83f7.js.map",
-    "static/js/2.cd772d61.chunk.js": "/chess-quiz/static/js/2.cd772d61.chunk.js",
-    "static/js/2.cd772d61.chunk.js.map": "/chess-quiz/static/js/2.cd772d61.chunk.js.map",
+    "static/js/2.c64d4b69.chunk.js": "/chess-quiz/static/js/2.c64d4b69.chunk.js",
+    "static/js/2.c64d4b69.chunk.js.map": "/chess-quiz/static/js/2.c64d4b69.chunk.js.map",
     "static/js/3.671a6948.chunk.js": "/chess-quiz/static/js/3.671a6948.chunk.js",
     "static/js/3.671a6948.chunk.js.map": "/chess-quiz/static/js/3.671a6948.chunk.js.map",
     "index.html": "/chess-quiz/index.html",
-    "static/css/main.a6b29d57.chunk.css.map": "/chess-quiz/static/css/main.a6b29d57.chunk.css.map",
-    "static/js/2.cd772d61.chunk.js.LICENSE.txt": "/chess-quiz/static/js/2.cd772d61.chunk.js.LICENSE.txt"
+    "static/css/main.05e62c20.chunk.css.map": "/chess-quiz/static/css/main.05e62c20.chunk.css.map",
+    "static/js/2.c64d4b69.chunk.js.LICENSE.txt": "/chess-quiz/static/js/2.c64d4b69.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.956f83f7.js",
-    "static/js/2.cd772d61.chunk.js",
-    "static/css/main.a6b29d57.chunk.css",
-    "static/js/main.bed572e5.chunk.js"
+    "static/js/2.c64d4b69.chunk.js",
+    "static/css/main.05e62c20.chunk.css",
+    "static/js/main.7c2fa3b5.chunk.js"
   ]
 }
