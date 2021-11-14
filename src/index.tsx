@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ViennaGameCourse } from './course_model';
-import CourseView from './course_view';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import RepertoireView from './views/repertoire_view';
+import { ViennaOnlyRepetoire } from './models/repertoire_model';
 
 ReactDOM.render(
   <React.StrictMode>
-    <CourseView course={ViennaGameCourse}/>
+    <RepertoireView repertoire={ViennaOnlyRepetoire}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

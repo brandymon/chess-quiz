@@ -1,15 +1,16 @@
 import { Fragment, PropsWithChildren, useState } from "react";
-import { CourseModel } from "./course_model";
-import { QuizModel } from "./quiz_model";
-import QuizPreview from "./quiz_preview";
+import { OpeningsModel } from "../models/opening_model";
+import { QuizModel } from "../models/quiz_model";
+import QuizPreview from "../components/quiz_preview";
 import QuizView from "./quiz_view";
 
 
-export interface CourseViewProps {
-    course: CourseModel
+export interface OpeningViewProps {
+    opening: OpeningsModel
 }
 
-export default function CourseView({course}: PropsWithChildren<CourseViewProps>) {
+/** Allow a user to choose which line of an opening they'd like to review, then take them to the appropriate quiz */
+export default function OpeningView({opening: course}: PropsWithChildren<OpeningViewProps>) {
     let [quiz, setQuiz] = useState<QuizModel | null>(null);
 
     const keyForQuiz = (quiz: QuizModel) => course.name + "=>" + quiz?.name;

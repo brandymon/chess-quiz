@@ -1,8 +1,8 @@
 import { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
-import InteractiveBoard from "./interactive_board";
-import { QuizModel, viennaGambitAcceptedQuiz } from "./quiz_model";
+import InteractiveBoard from "../components/interactive_board";
+import { QuizModel, viennaGambitAcceptedQuiz } from "../models/quiz_model";
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 
 enum QuizState {
