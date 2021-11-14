@@ -1,9 +1,9 @@
-import { QuizModel, viennaGambitAcceptedQuiz, viennaGambitDeclined3d6Quiz, viennaGambitDeclinedNc6Quiz, viennaGambitMainLineIntroQuiz, viennaGambitMainLineNxc3Quiz } from "./quiz_model";
+import { LineModel, viennaGambitAcceptedQuiz, viennaGambitDeclined3d6Quiz, viennaGambitDeclinedNc6Quiz, viennaGambitMainLineIntroQuiz, viennaGambitMainLineNxc3Quiz } from "./line_model";
 
 export interface OpeningsModel {
     name: string,
     initialPosition: string,
-    lines: QuizModel[]
+    lines: LineModel[]
 }
 
 export const ViennaGambitCourse: OpeningsModel = {

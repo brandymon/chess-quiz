@@ -1,14 +1,14 @@
 import { MouseEventHandler } from "react";
 import ChessPosition from "./chess_position";
-import { QuizModel } from "../models/quiz_model";
+import { LineModel } from "../models/line_model";
 
-export interface QuizPreviewProps {
-    quiz: QuizModel,
+export interface LinePreviewProps {
+    quiz: LineModel,
     onClick?: MouseEventHandler,
     score: number | null,
 }
 
-const QuizPreview = (props: QuizPreviewProps) =>  {
+export default function LinePreview(props: LinePreviewProps)  {
     let scorePromptClassName: "Passed" | "Failed" | null = null;
     if (props.score) {
         if (props.score === props.quiz.questions.length)
@@ -27,5 +27,3 @@ const QuizPreview = (props: QuizPreviewProps) =>  {
         </ChessPosition>
     )
 };
-
-export default QuizPreview;

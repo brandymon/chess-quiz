@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "../components/interactive_board";
-import { QuizModel, viennaGambitAcceptedQuiz } from "../models/quiz_model";
+import { LineModel, viennaGambitAcceptedQuiz } from "../models/line_model";
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 
 enum QuizState {
@@ -13,12 +13,12 @@ enum QuizState {
 }
 
 export interface QuizProps {
-    quiz: QuizModel,
+    quiz: LineModel,
     onFinishQuiz: (score: number) => void,
 }
 
 interface QuestionViewProps {
-    quiz: QuizModel,
+    quiz: LineModel,
     questionNumber: number
 }
 

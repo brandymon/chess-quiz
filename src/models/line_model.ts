@@ -7,16 +7,16 @@ export interface QuizQuestion {
     nextMove: ChessJS.ShortMove,
 }
 
-export interface QuizModel {
+export interface LineModel {
      /** FEN of the  starting position for this line */ 
     initialPosition: string,
-    /** A sequence of questions to ask about the position */
+    /** A series of questions to ask about the position */
     questions: QuizQuestion[],
     /** the name of this quiz */
     name: string
 }
 
-export const viennaGambitAcceptedQuiz: QuizModel = {
+export const viennaGambitAcceptedQuiz: LineModel = {
     name: "Vienna Gambit Accepted",
     initialPosition: "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
     questions: [
@@ -65,7 +65,7 @@ export const viennaGambitAcceptedQuiz: QuizModel = {
     ]
 };
 
-export const viennaGambitDeclinedNc6Quiz: QuizModel = {
+export const viennaGambitDeclinedNc6Quiz: LineModel = {
     name: "Vienna Gambit Declined, 3...Nc6",
     initialPosition: "r1bqkb1r/pppp1ppp/2n2n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 4",
     questions: [
@@ -90,7 +90,7 @@ export const viennaGambitDeclinedNc6Quiz: QuizModel = {
     ]
 };
 
-export const viennaGambitDeclined3d6Quiz: QuizModel = {
+export const viennaGambitDeclined3d6Quiz: LineModel = {
     name: "Vienna Gambit Declined, 3...d6",
     initialPosition: "rnbqkb1r/ppp2ppp/3p1n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
     questions: [
@@ -115,7 +115,7 @@ export const viennaGambitDeclined3d6Quiz: QuizModel = {
     ]
 };
 
-export const viennaGambitMainLineIntroQuiz: QuizModel = {
+export const viennaGambitMainLineIntroQuiz: LineModel = {
     name: "Vienna Gambit, Main Line (Intro)",
     initialPosition: "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq d6 0 4",
     questions: [
@@ -134,7 +134,7 @@ export const viennaGambitMainLineIntroQuiz: QuizModel = {
     ]
 };
 
-export const viennaGambitMainLineNxc3Quiz: QuizModel = {
+export const viennaGambitMainLineNxc3Quiz: LineModel = {
     name: "Vienna Gambit, Main Line 5...Nxc3",
     initialPosition: "rnbqkb1r/ppp2ppp/8/3pP3/8/2n2Q2/PPPP2PP/R1B1KBNR w KQkq - 0 6",
     questions: [
