@@ -1,9 +1,9 @@
-import { PropsWithChildren, useEffect, useReducer, useState } from "react";
+import {  useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "../components/interactive_board";
 import { isLine, LineModel, viennaGambitAcceptedQuiz } from "../models/line_model";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { retrieveObject, storeObject } from "../services/storage";
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 

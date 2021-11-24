@@ -10,7 +10,7 @@ import RepertoireView from "./repertoire_view";
 
 export default function App() {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename="chess-quiz">
             <Routes>
                 <Route path="/" element={<RepertoireView/>}/>
                 <Route path="/opening/:openingID" element={<OpeningView/>}/>

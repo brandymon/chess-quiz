@@ -1,15 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import ChessPosition from "../components/chess_position";
-import OpeningView from "./opening_view";
-import { OpeningsModel } from "../models/opening_model";
 import { getRepertoire } from "../services/storage";
 
 
 export default function RepertoireView() {
 
     let [repertoire] = useState(() => getRepertoire());
-    useEffect(() => { document.title = "chessquiz - your repertoire"; });
-    
+    useEffect(() => { document.title = "Chessquiz - Your Repertoire"; });
+
     return (
         <Fragment>
             <h1>Your Repertoire</h1>
@@ -21,6 +19,7 @@ export default function RepertoireView() {
                             position={opening.initialPosition} 
                             name={opening.name} 
                             href={`/opening/${opening.id}`}
+                            key={opening.id}
                         />)
                 }
             </div>

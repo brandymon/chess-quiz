@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import LinePreview from "../components/line_preview";
 import { getOpening } from "../services/storage";
 import { useParams } from "react-router";
@@ -8,8 +8,9 @@ export default function OpeningView() {
 
     let params = useParams();
 
-    let [opening] = useState(() => (params.openingID && getOpening(params.openingID)));
-    if (!opening) throw Error("Undefined opening ID");
+    let [opening] = useState(() => getOpening(params.openingID ?? ""));
+    
+    useEffect(() => { document.title = opening.name; }, [opening.name]);
 
     return (
         <Fragment>
@@ -21,6 +22,7 @@ export default function OpeningView() {
                         quiz={quiz} 
                         href={quiz.id}
                         score={quiz.lastScore}
+                        key={quiz.id}
                     />)}
             </div>
         </Fragment>

@@ -115,6 +115,7 @@ h1 {
   word-wrap: break-word;
   width: calc(0.8em + 200px);
   gap: 0.7em;
+  
 }
 
 .QuizPreview h2 {
@@ -168,6 +169,11 @@ button:hover {
   border: 0.2em solid #ffffff;
   padding: 0.2em;
   font-weight: bold;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
 }
 
 @media only screen and (orientation: portrait) {

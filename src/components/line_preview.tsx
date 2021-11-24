@@ -1,4 +1,3 @@
-import { MouseEventHandler } from "react";
 import ChessPosition from "./chess_position";
 import { LineModel } from "../models/line_model";
 
