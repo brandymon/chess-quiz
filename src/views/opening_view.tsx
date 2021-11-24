@@ -3,6 +3,7 @@ import { OpeningsModel } from "../models/opening_model";
 import { LineModel } from "../models/line_model";
 import LinePreview from "../components/line_preview";
 import QuizView from "./quiz_view";
+import { storeObject } from "../services/storage";
 
 export interface OpeningViewProps {
     opening: OpeningsModel
@@ -10,22 +11,20 @@ export interface OpeningViewProps {
 
 /** Allow a user to choose which line of an opening they'd like to review, then take them to the appropriate quiz */
 export default function OpeningView({opening: course}: PropsWithChildren<OpeningViewProps>) {
-    let [quiz, setQuiz] = useState<LineModel | null>(null);
+    let [line, setLine] = useState<LineModel | null>(null);
 
-    const keyForQuiz = (quiz: LineModel) => course.name + "=>" + quiz?.name;
-
-    if (quiz) {
+    if (line) {
         const onFinishQuiz = (finalScore: number) => {
-            quiz && localStorage.setItem(keyForQuiz(quiz), finalScore.toString());
-            setQuiz(null);
+            if (line) {
+                line.lastScore = finalScore;
+                storeObject(line);
+            }
+            
+            setLine(null);
         };
-        return <QuizView quiz={quiz} onFinishQuiz={onFinishQuiz}/>;
-    }
 
-    const scoreForQuiz = (quiz: LineModel) => {
-        const scoreString = localStorage.getItem(keyForQuiz(quiz));
-        return scoreString ? parseInt(scoreString) : null;
-    };
+        return <QuizView quiz={line} onFinishQuiz={onFinishQuiz}/>;
+    }
 
     return (
         <Fragment>
@@ -35,8 +34,8 @@ export default function OpeningView({opening: course}: PropsWithChildren<Opening
                 {course.lines.map(quiz => 
                     <LinePreview 
                         quiz={quiz} 
-                        onClick={()=>setQuiz(quiz)}
-                        score={scoreForQuiz(quiz)}
+                        onClick={()=>setLine(quiz)}
+                        score={quiz.lastScore}
                     />)}
             </div>
         </Fragment>

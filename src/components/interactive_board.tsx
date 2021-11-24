@@ -1,7 +1,6 @@
 import React, { CSSProperties, useState } from "react";
 //import PropTypes from "prop-types";
 
-
 import { ChessInstance } from "chess.js";
 import * as ChessJS from "chess.js";
 

@@ -5,7 +5,7 @@ import { LineModel } from "../models/line_model";
 export interface LinePreviewProps {
     quiz: LineModel,
     onClick?: MouseEventHandler,
-    score: number | null,
+    score?: number,
 }
 
 export default function LinePreview(props: LinePreviewProps)  {

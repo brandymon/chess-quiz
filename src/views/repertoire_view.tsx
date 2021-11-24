@@ -1,19 +1,17 @@
-import { Fragment, PropsWithChildren, useState } from "react";
+import { Fragment, useState } from "react";
 import ChessPosition from "../components/chess_position";
 import OpeningView from "./opening_view";
 import { OpeningsModel } from "../models/opening_model";
-import { RepertoireModel } from "../models/repertoire_model";
+import { getRepertoire } from "../services/storage";
 
-export interface RepertoireProps {
-    repertoire: RepertoireModel
-}
 
-export default function RepertoireView({repertoire}: PropsWithChildren<RepertoireProps>) {
+export default function RepertoireView() {
 
     let [opening, setOpening] = useState<OpeningsModel | null>(null);
+    let [repertoire] = useState(() => getRepertoire());
 
     if (opening) return (<OpeningView opening={opening}/>);
-
+    
     return (
         <Fragment>
             <h1>Your Repertoire</h1>

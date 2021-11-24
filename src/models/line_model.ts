@@ -1,4 +1,5 @@
 import * as ChessJS from "chess.js"
+import { Identifiable } from "./identifiable";
 
 export interface QuizQuestion {
     prompt: string,
@@ -7,13 +8,19 @@ export interface QuizQuestion {
     nextMove: ChessJS.ShortMove,
 }
 
-export interface LineModel {
+export interface LineModel extends Identifiable {
      /** FEN of the  starting position for this line */ 
     initialPosition: string,
     /** A series of questions to ask about the position */
     questions: QuizQuestion[],
-    /** the name of this quiz */
-    name: string
+    /** The name of this quiz */
+    name: string,
+    /** The last score schioeved by the user on the quiz for this line */
+    lastScore?: number,
+}
+
+export function isLine(line: Identifiable | null) : line is LineModel {
+    return line != null && "initialPosition" in line &&  "questions" in line && "name" in line && "id" in line;
 }
 
 export const viennaGambitAcceptedQuiz: LineModel = {

@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import RepertoireView from './views/repertoire_view';
-import { ViennaOnlyRepetoire } from './models/repertoire_model';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RepertoireView repertoire={ViennaOnlyRepetoire}/>
+    <RepertoireView/>
   </React.StrictMode>,
   document.getElementById('root')
 );
