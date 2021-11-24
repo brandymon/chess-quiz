@@ -4,8 +4,8 @@ import { LineModel } from "../models/line_model";
 
 export interface LinePreviewProps {
     quiz: LineModel,
-    onClick?: MouseEventHandler,
     score?: number,
+    href?: string
 }
 
 export default function LinePreview(props: LinePreviewProps)  {
@@ -22,7 +22,7 @@ export default function LinePreview(props: LinePreviewProps)  {
         : null;
 
     return (
-        <ChessPosition onClick={props.onClick} position={props.quiz.initialPosition} name={props.quiz.name}>
+        <ChessPosition href={props.href} position={props.quiz.initialPosition} name={props.quiz.name}>
             {scorePrompt}
         </ChessPosition>
     )

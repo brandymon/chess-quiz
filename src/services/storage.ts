@@ -9,16 +9,17 @@ export function storeObject(storableObject: Identifiable) {
     localStorage.setItem(storableObject.id, JSON.stringify(storableObject));
 }
 
-export function retrieveObject(id: string) : Identifiable | null {
+export function retrieveObject(id: string) : Identifiable {
     let json = localStorage.getItem(id);
     if (json) return JSON.parse(json);
-    return null;
+    throw Error(`No object exists in storage with given id: ${id}`)
 }
 
-export function getOpening(id: string) : OpeningsModel | null {
+export function getOpening(id: string) : OpeningsModel {
     const openingModelIds = retrieveObject(id);
 
-    if (!isOpeningIDs(openingModelIds)) return null;
+    if (!isOpeningIDs(openingModelIds))
+        throw Error(`Object with given id is not an opening, id: ${id}`);
 
     return {
         ...openingModelIds,

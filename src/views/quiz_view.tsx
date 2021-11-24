@@ -2,7 +2,9 @@ import { PropsWithChildren, useEffect, useReducer, useState } from "react";
 
 import * as ChessJS from "chess.js"
 import InteractiveBoard from "../components/interactive_board";
-import { LineModel, viennaGambitAcceptedQuiz } from "../models/line_model";
+import { isLine, LineModel, viennaGambitAcceptedQuiz } from "../models/line_model";
+import { Navigate, useNavigate, useParams } from "react-router";
+import { retrieveObject, storeObject } from "../services/storage";
 const Chess = typeof ChessJS === "function" ? ChessJS : ChessJS.Chess;
 
 enum QuizState {
@@ -10,11 +12,6 @@ enum QuizState {
     Retry = "Retry",
     Next = "Next",
     Complete = "Finish Quiz"
-}
-
-export interface QuizProps {
-    quiz: LineModel,
-    onFinishQuiz: (score: number) => void,
 }
 
 interface QuestionViewProps {
@@ -41,15 +38,21 @@ const IncorrectResponse = (props: ResponseViewProps) =>
 const CorrectResponse = (props: ResponseViewProps) => 
     getPrompt("Correct", `${props.move} is correct`, props.message);
 
-export default function QuizView({quiz, onFinishQuiz}: PropsWithChildren<QuizProps>) {
-    
+export default function QuizView() {
+    let params = useParams();
+    let navigate = useNavigate();
+
+    let [quiz] = useState(() => {
+        let q = retrieveObject(params.lineID ?? "");
+        if (isLine(q)) return q;
+        throw Error(`Given lineID is not a Quiz, id: ${params.lineID}`);
+    });
+
     let [position, setPosition] = useState(quiz.initialPosition);
     let [game] = useState(() => new Chess(position));
     let [questionNumber, incrementQuestionNumBy] = useReducer((state: number, num: number) => state + num, 0);
 
-    useEffect(() => { 
-        document.title = quiz.name;
-    });
+    useEffect(() => { if (isLine(quiz)) document.title = quiz.name; });
 
     let [prompts, addPrompt] = useReducer((oldPrompts: JSX.Element[], newPrompt: JSX.Element) => 
         [...oldPrompts, newPrompt],
@@ -84,6 +87,12 @@ export default function QuizView({quiz, onFinishQuiz}: PropsWithChildren<QuizPro
             addPrompt(<IncorrectResponse move={lastMove}/>);
             setQuizState(QuizState.Retry);
         }
+    };
+
+    const onFinishQuiz = (finalScore: number) => {
+        quiz.lastScore = finalScore;
+        storeObject(quiz);
+        navigate(`./..`);
     };
 
     const onButtonClick = () => {

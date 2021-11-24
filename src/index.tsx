@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import RepertoireView from './views/repertoire_view';
+import App from './views/app';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RepertoireView/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

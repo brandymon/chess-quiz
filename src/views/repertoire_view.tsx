@@ -7,10 +7,7 @@ import { getRepertoire } from "../services/storage";
 
 export default function RepertoireView() {
 
-    let [opening, setOpening] = useState<OpeningsModel | null>(null);
     let [repertoire] = useState(() => getRepertoire());
-
-    if (opening) return (<OpeningView opening={opening}/>);
     
     return (
         <Fragment>
@@ -22,7 +19,7 @@ export default function RepertoireView() {
                         <ChessPosition 
                             position={opening.initialPosition} 
                             name={opening.name} 
-                            onClick={() => setOpening(opening)}
+                            href={`/opening/${opening.id}`}
                         />)
                 }
             </div>
