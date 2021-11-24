@@ -1,5 +1,5 @@
 import Chessboard from "chessboardjsx";
-import { MouseEventHandler, PropsWithChildren } from "react";
+import { Fragment, PropsWithChildren } from "react";
 import { Link } from "react-router-dom";
 
 export interface ChessPositionProps {
@@ -9,8 +9,8 @@ export interface ChessPositionProps {
 }
 
 export default function ChessPosition({name, position, children, href}: PropsWithChildren<ChessPositionProps>) {
-    let preview = 
-        <div className="QuizPreview">
+    let preview =
+        <Fragment>
             <Chessboard 
                 darkSquareStyle={{backgroundColor: "#929af7"}}
                 lightSquareStyle={{backgroundColor: "#e9ebfd"}}
@@ -20,9 +20,9 @@ export default function ChessPosition({name, position, children, href}: PropsWit
             />
             <h2>{name}</h2>
             {children}
-        </div>;
+        </Fragment>;
     
-    if (href) return (<Link to={href}> {preview} </Link>);
+    if (href) return (<Link className="QuizPreview" to={href}> {preview} </Link>);
 
-    return preview;
+    return <span className="QuizPreview">{preview}</span>;
 }

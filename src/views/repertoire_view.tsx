@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import ChessPosition from "../components/chess_position";
 import OpeningView from "./opening_view";
 import { OpeningsModel } from "../models/opening_model";
@@ -8,6 +8,7 @@ import { getRepertoire } from "../services/storage";
 export default function RepertoireView() {
 
     let [repertoire] = useState(() => getRepertoire());
+    useEffect(() => { document.title = "chessquiz - your repertoire"; });
     
     return (
         <Fragment>
