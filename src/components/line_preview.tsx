@@ -4,7 +4,8 @@ import { LineModel } from "../models/line_model";
 export interface LinePreviewProps {
     quiz: LineModel,
     score?: number,
-    href?: string
+    linkTo?: string,
+    editLink?: string,
 }
 
 export default function LinePreview(props: LinePreviewProps)  {
@@ -17,11 +18,11 @@ export default function LinePreview(props: LinePreviewProps)  {
     }
 
     const scorePrompt = props.score && scorePromptClassName
-        ? <span className={scorePromptClassName + " Score"}>{`${props.score}/${props.quiz.questions.length}`}</span>
+        ? <div className={scorePromptClassName + " Score"}>{`${props.score}/${props.quiz.questions.length}`}</div>
         : null;
 
     return (
-        <ChessPosition href={props.href} position={props.quiz.initialPosition} name={props.quiz.name}>
+        <ChessPosition linkTo={props.linkTo} position={props.quiz.initialPosition} name={props.quiz.name} editLink={props.editLink}>
             {scorePrompt}
         </ChessPosition>
     )

@@ -20,9 +20,10 @@ export default function OpeningView() {
                 {opening.lines.map(quiz => 
                     <LinePreview 
                         quiz={quiz} 
-                        href={quiz.id}
+                        linkTo={quiz.id}
                         score={quiz.lastScore}
                         key={quiz.id}
+                        editLink={`/edit/line/${quiz.id}`}
                     />)}
             </div>
         </Fragment>

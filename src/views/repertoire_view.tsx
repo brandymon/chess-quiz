@@ -18,7 +18,7 @@ export default function RepertoireView() {
                         <ChessPosition 
                             position={opening.initialPosition} 
                             name={opening.name} 
-                            href={`/opening/${opening.id}`}
+                            linkTo={`/opening/${opening.id}`}
                             key={opening.id}
                         />)
                 }
