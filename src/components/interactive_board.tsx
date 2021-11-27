@@ -24,11 +24,11 @@ interface BoardState {
 
 export interface BoardProps {
     /**The board position of the current chess game, in FEN */
-    position: string,
+    position?: string,
     /**The ChessInstance used for determining legal moves and store history (passed in as a prop so parent component can manipulate) */
     game: ChessInstance,
     /**Callback used when a valid move is made */
-    onValidMove: (move: ChessJS.ShortMove, position: string) => void
+    onValidMove?: (move: ChessJS.ShortMove, position: string) => void
 }
 
 const moveHighlightColor = "#666cad";

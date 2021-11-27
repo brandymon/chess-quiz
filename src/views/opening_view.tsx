@@ -23,7 +23,7 @@ export default function OpeningView() {
                         linkTo={quiz.id}
                         score={quiz.lastScore}
                         key={quiz.id}
-                        editLink={`/edit/line/${quiz.id}`}
+                        editLink={`./edit/${quiz.id}`}
                     />)}
             </div>
         </Fragment>

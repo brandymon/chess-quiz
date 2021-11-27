@@ -191,6 +191,15 @@ a {
   padding: 0.2em 1.3em;
 }
 
+.QuizEditor {
+  flex-grow: 1;
+}
+
+input {
+  width: 100%;
+  display: list-item;
+}
+
 @media only screen and (orientation: portrait) {
   .QuizBoardAndPrompts {
     flex-direction: column;
